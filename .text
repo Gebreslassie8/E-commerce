@@ -1,0 +1,660 @@
+by assuming those bright-techmart/
+├── 📁 frontend/
+│   ├── 📁 public/
+│   │   ├── favicon.ico
+│   │   ├── logo.svg
+│   │   ├── logo.png
+│   │   ├── favicon-16x16.png
+│   │   ├── favicon-32x32.png
+│   │   ├── apple-touch-icon.png
+│   │   ├── android-chrome-192x192.png
+│   │   ├── android-chrome-512x512.png
+│   │   ├── site.webmanifest
+│   │   └── robots.txt
+│   │
+│   ├── 📁 src/
+│   │   ├── 📁 assets/
+│   │   │   ├── 📁 images/
+│   │   │   │   ├── 📁 products/
+│   │   │   │   │   ├── smartphones/
+│   │   │   │   │   ├── laptops/
+│   │   │   │   │   ├── accessories/
+│   │   │   │   │   ├── components/
+│   │   │   │   │   └── placeholders/
+│   │   │   │   ├── 📁 banners/
+│   │   │   │   │   ├── hero/
+│   │   │   │   │   ├── promotions/
+│   │   │   │   │   └── seasonal/
+│   │   │   │   ├── 📁 logos/
+│   │   │   │   │   ├── brands/
+│   │   │   │   │   ├── partners/
+│   │   │   │   │   └── payment-methods/
+│   │   │   │   ├── 📁 icons/
+│   │   │   │   │   ├── social/
+│   │   │   │   │   ├── features/
+│   │   │   │   │   └── ui/
+│   │   │   │   └── 📁 avatars/
+│   │   │   │
+│   │   │   ├── 📁 fonts/
+│   │   │   │   ├── Inter-Regular.woff2
+│   │   │   │   ├── Inter-Medium.woff2
+│   │   │   │   ├── Inter-SemiBold.woff2
+│   │   │   │   └── Inter-Bold.woff2
+│   │   │   │
+│   │   │   ├── 📁 styles/
+│   │   │   │   ├── globals.css
+│   │   │   │   ├── animations.css
+│   │   │   │   ├── theme.css
+│   │   │   │   └── vendor-overrides.css
+│   │   │   │
+│   │   │   └── 📁 locales/
+│   │   │       ├── am/
+│   │   │       │   ├── common.json
+│   │   │       │   ├── products.json
+│   │   │       │   └── checkout.json
+│   │   │       ├── en/
+│   │   │       │   ├── common.json
+│   │   │       │   ├── products.json
+│   │   │       │   └── checkout.json
+│   │   │       └── or/
+│   │   │           ├── common.json
+│   │   │           ├── products.json
+│   │   │           └── checkout.json
+│   │   │
+│   │   ├── 📁 components/
+│   │   │   ├── 📁 core/
+│   │   │   │   ├── 📁 layout/
+│   │   │   │   │   ├── Header/
+│   │   │   │   │   │   ├── Header.tsx
+│   │   │   │   │   │   ├── Logo.tsx
+│   │   │   │   │   │   ├── TopBar.tsx
+│   │   │   │   │   │   ├── MainNav.tsx
+│   │   │   │   │   │   ├── MobileMenu.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   ├── Footer/
+│   │   │   │   │   │   ├── Footer.tsx
+│   │   │   │   │   │   ├── FooterColumns.tsx
+│   │   │   │   │   │   ├── Newsletter.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   ├── Sidebar/
+│   │   │   │   │   │   ├── AdminSidebar.tsx
+│   │   │   │   │   │   ├── VendorSidebar.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   └── Container.tsx
+│   │   │   │   │
+│   │   │   │   ├── 📁 ui/
+│   │   │   │   │   ├── 📁 buttons/
+│   │   │   │   │   │   ├── Button.tsx
+│   │   │   │   │   │   ├── IconButton.tsx
+│   │   │   │   │   │   ├── AddToCartButton.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   ├── 📁 cards/
+│   │   │   │   │   │   ├── ProductCard.tsx
+│   │   │   │   │   │   ├── CategoryCard.tsx
+│   │   │   │   │   │   ├── OrderCard.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   ├── 📁 forms/
+│   │   │   │   │   │   ├── Input.tsx
+│   │   │   │   │   │   ├── TextArea.tsx
+│   │   │   │   │   │   ├── Select.tsx
+│   │   │   │   │   │   ├── Checkbox.tsx
+│   │   │   │   │   │   ├── RadioGroup.tsx
+│   │   │   │   │   │   ├── FileUpload.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   ├── 📁 modals/
+│   │   │   │   │   │   ├── Modal.tsx
+│   │   │   │   │   │   ├── CartModal.tsx
+│   │   │   │   │   │   ├── FilterModal.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   ├── 📁 badges/
+│   │   │   │   │   │   ├── Badge.tsx
+│   │   │   │   │   │   ├── StatusBadge.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   ├── 📁 loaders/
+│   │   │   │   │   │   ├── Spinner.tsx
+│   │   │   │   │   │   ├── SkeletonLoader.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   ├── 📁 notifications/
+│   │   │   │   │   │   ├── Toast.tsx
+│   │   │   │   │   │   ├── Alert.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   └── 📁 tabs/
+│   │   │   │   │       ├── Tabs.tsx
+│   │   │   │   │       └── index.ts
+│   │   │   │   │
+│   │   │   │   └── 📁 shared/
+│   │   │   │       ├── Breadcrumb.tsx
+│   │   │   │       ├── Pagination.tsx
+│   │   │   │       ├── EmptyState.tsx
+│   │   │   │       ├── ErrorBoundary.tsx
+│   │   │   │       ├── LanguageSwitcher.tsx
+│   │   │   │       └── index.ts
+│   │   │   │
+│   │   │   ├── 📁 modules/
+│   │   │   │   ├── 📁 auth/
+│   │   │   │   │   ├── LoginForm.tsx
+│   │   │   │   │   ├── RegisterForm.tsx
+│   │   │   │   │   ├── ForgotPasswordForm.tsx
+│   │   │   │   │   ├── ResetPasswordForm.tsx
+│   │   │   │   │   ├── AuthLayout.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   │
+│   │   │   │   ├── 📁 products/
+│   │   │   │   │   ├── ProductGrid.tsx
+│   │   │   │   │   ├── ProductList.tsx
+│   │   │   │   │   ├── ProductImageGallery.tsx
+│   │   │   │   │   ├── ProductRating.tsx
+│   │   │   │   │   ├── ProductVariants.tsx
+│   │   │   │   │   ├── ProductDescription.tsx
+│   │   │   │   │   ├── ProductReviews.tsx
+│   │   │   │   │   ├── RelatedProducts.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   │
+│   │   │   │   ├── 📁 categories/
+│   │   │   │   │   ├── CategoryFilter.tsx
+│   │   │   │   │   ├── CategoryMenu.tsx
+│   │   │   │   │   ├── CategoryBreadcrumb.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   │
+│   │   │   │   ├── 📁 cart/
+│   │   │   │   │   ├── CartItem.tsx
+│   │   │   │   │   ├── CartSummary.tsx
+│   │   │   │   │   ├── CartSidebar.tsx
+│   │   │   │   │   ├── EmptyCart.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   │
+│   │   │   │   ├── 📁 checkout/
+│   │   │   │   │   ├── CheckoutSteps.tsx
+│   │   │   │   │   ├── ShippingForm.tsx
+│   │   │   │   │   ├── BillingForm.tsx
+│   │   │   │   │   ├── PaymentOptions.tsx
+│   │   │   │   │   ├── OrderSummary.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   │
+│   │   │   │   ├── 📁 search/
+│   │   │   │   │   ├── SearchBar.tsx
+│   │   │   │   │   ├── SearchResults.tsx
+│   │   │   │   │   ├── SearchFilters.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   │
+│   │   │   │   ├── 📁 filters/
+│   │   │   │   │   ├── PriceFilter.tsx
+│   │   │   │   │   ├── SortFilter.tsx
+│   │   │   │   │   ├── BrandFilter.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   │
+│   │   │   │   └── 📁 payment/
+│   │   │   │       ├── PaymentMethodSelector.tsx
+│   │   │   │       ├── ChapaWidget.tsx
+│   │   │   │       ├── TelebirrQRCode.tsx
+│   │   │   │       ├── StripeCheckout.tsx
+│   │   │   │       └── index.ts
+│   │   │   │
+│   │   │   ├── 📁 dashboard/
+│   │   │   │   ├── 📁 admin/
+│   │   │   │   │   ├── DashboardStats.tsx
+│   │   │   │   │   ├── RecentOrders.tsx
+│   │   │   │   │   ├── TopProducts.tsx
+│   │   │   │   │   ├── UserManagement.tsx
+│   │   │   │   │   ├── VendorManagement.tsx
+│   │   │   │   │   ├── SalesAnalytics.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   │
+│   │   │   │   ├── 📁 vendor/
+│   │   │   │   │   ├── VendorDashboard.tsx
+│   │   │   │   │   ├── ProductManagement.tsx
+│   │   │   │   │   ├── OrderManagement.tsx
+│   │   │   │   │   ├── InventoryManagement.tsx
+│   │   │   │   │   ├── SalesReport.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   │
+│   │   │   │   └── 📁 user/
+│   │   │   │       ├── UserProfile.tsx
+│   │   │   │       ├── OrderHistory.tsx
+│   │   │   │       ├── Wishlist.tsx
+│   │   │   │       ├── AddressBook.tsx
+│   │   │   │       └── index.ts
+│   │   │   │
+│   │   │   └── 📁 widgets/
+│   │   │       ├── HeroSlider.tsx
+│   │   │       ├── FeaturedCategories.tsx
+│   │   │       ├── TopProductsWidget.tsx
+│   │   │       ├── NewsletterWidget.tsx
+│   │   │       └── index.ts
+│   │   │
+│   │   ├── 📁 pages/
+│   │   │   ├── HomePage/
+│   │   │   │   ├── HomePage.tsx
+│   │   │   │   ├── HeroSection.tsx
+│   │   │   │   ├── FeaturedProducts.tsx
+│   │   │   │   ├── CategoriesSection.tsx
+│   │   │   │   ├── Testimonials.tsx
+│   │   │   │   └── index.ts
+│   │   │   │
+│   │   │   ├── ProductPages/
+│   │   │   │   ├── ProductListingPage/
+│   │   │   │   │   ├── ProductListingPage.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── ProductDetailPage/
+│   │   │   │   │   ├── ProductDetailPage.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   └── CompareProductsPage/
+│   │   │   │       ├── CompareProductsPage.tsx
+│   │   │   │       └── index.ts
+│   │   │   │
+│   │   │   ├── CartPage/
+│   │   │   │   ├── CartPage.tsx
+│   │   │   │   └── index.ts
+│   │   │   │
+│   │   │   ├── CheckoutPage/
+│   │   │   │   ├── CheckoutPage.tsx
+│   │   │   │   ├── PaymentPage.tsx
+│   │   │   │   ├── PaymentSuccess.tsx
+│   │   │   │   ├── PaymentFailed.tsx
+│   │   │   │   └── index.ts
+│   │   │   │
+│   │   │   ├── AuthPages/
+│   │   │   │   ├── LoginPage.tsx
+│   │   │   │   ├── RegisterPage.tsx
+│   │   │   │   ├── ForgotPasswordPage.tsx
+│   │   │   │   └── index.ts
+│   │   │   │
+│   │   │   ├── DashboardPages/
+│   │   │   │   ├── AdminDashboard.tsx
+│   │   │   │   ├── VendorDashboard.tsx
+│   │   │   │   ├── UserDashboard.tsx
+│   │   │   │   └── index.ts
+│   │   │   │
+│   │   │   ├── OrderPages/
+│   │   │   │   ├── OrdersPage.tsx
+│   │   │   │   ├── OrderDetailPage.tsx
+│   │   │   │   ├── OrderTracking.tsx
+│   │   │   │   └── index.ts
+│   │   │   │
+│   │   │   ├── ProfilePages/
+│   │   │   │   ├── ProfilePage.tsx
+│   │   │   │   └── index.ts
+│   │   │   │
+│   │   │   ├── StaticPages/
+│   │   │   │   ├── AboutPage.tsx
+│   │   │   │   ├── ContactPage.tsx
+│   │   │   │   ├── FAQPage.tsx
+│   │   │   │   ├── PrivacyPolicy.tsx
+│   │   │   │   ├── TermsOfService.tsx
+│   │   │   │   ├── ReturnPolicy.tsx
+│   │   │   │   └── index.ts
+│   │   │   │
+│   │   │   └── ErrorPages/
+│   │   │       ├── NotFoundPage.tsx
+│   │   │       ├── ErrorPage.tsx
+│   │   │       ├── MaintenancePage.tsx
+│   │   │       └── index.ts
+│   │   │
+│   │   ├── 📁 store/
+│   │   │   ├── 📁 slices/
+│   │   │   │   ├── authSlice.ts
+│   │   │   │   ├── cartSlice.ts
+│   │   │   │   ├── productSlice.ts
+│   │   │   │   ├── categorySlice.ts
+│   │   │   │   ├── orderSlice.ts
+│   │   │   │   ├── userSlice.ts
+│   │   │   │   ├── uiSlice.ts
+│   │   │   │   └── notificationSlice.ts
+│   │   │   ├── hooks.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 hooks/
+│   │   │   ├── useAuth.ts
+│   │   │   ├── useCart.ts
+│   │   │   ├── useProducts.ts
+│   │   │   ├── useCategories.ts
+│   │   │   ├── useOrders.ts
+│   │   │   ├── useLocalStorage.ts
+│   │   │   ├── useDebounce.ts
+│   │   │   ├── useMediaQuery.ts
+│   │   │   ├── useIntersectionObserver.ts
+│   │   │   ├── useSocket.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 utils/
+│   │   │   ├── formatters.ts
+│   │   │   ├── validators.ts
+│   │   │   ├── helpers.ts
+│   │   │   ├── constants.ts
+│   │   │   ├── api.ts
+│   │   │   ├── currency.ts
+│   │   │   ├── date.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 lib/
+│   │   │   ├── axios.ts
+│   │   │   ├── socket.ts
+│   │   │   ├── chapa.ts
+│   │   │   ├── telebirr.ts
+│   │   │   ├── stripe.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 services/
+│   │   │   ├── 📁 api/
+│   │   │   │   ├── authService.ts
+│   │   │   │   ├── productService.ts
+│   │   │   │   ├── categoryService.ts
+│   │   │   │   ├── cartService.ts
+│   │   │   │   ├── orderService.ts
+│   │   │   │   ├── userService.ts
+│   │   │   │   ├── vendorService.ts
+│   │   │   │   └── adminService.ts
+│   │   │   ├── 📁 payment/
+│   │   │   │   ├── chapaService.ts
+│   │   │   │   ├── telebirrService.ts
+│   │   │   │   ├── stripeService.ts
+│   │   │   │   ├── paymentService.ts
+│   │   │   │   └── index.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 types/
+│   │   │   ├── product.types.ts
+│   │   │   ├── cart.types.ts
+│   │   │   ├── user.types.ts
+│   │   │   ├── order.types.ts
+│   │   │   ├── category.types.ts
+│   │   │   ├── vendor.types.ts
+│   │   │   ├── payment.types.ts
+│   │   │   ├── api.types.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 config/
+│   │   │   ├── routes.config.ts
+│   │   │   ├── theme.config.ts
+│   │   │   ├── payment.config.ts
+│   │   │   ├── api.config.ts
+│   │   │   ├── constants.config.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 contexts/
+│   │   │   ├── AuthContext.tsx
+│   │   │   ├── CartContext.tsx
+│   │   │   ├── ThemeContext.tsx
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 schemas/
+│   │   │   ├── auth.schema.ts
+│   │   │   ├── product.schema.ts
+│   │   │   ├── order.schema.ts
+│   │   │   ├── checkout.schema.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 middleware/
+│   │   │   ├── authMiddleware.ts
+│   │   │   ├── vendorMiddleware.ts
+│   │   │   ├── adminMiddleware.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 providers/
+│   │   │   ├── AppProviders.tsx
+│   │   │   ├── ThemeProvider.tsx
+│   │   │   ├── AuthProvider.tsx
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 layouts/
+│   │   │   ├── MainLayout.tsx
+│   │   │   ├── AuthLayout.tsx
+│   │   │   ├── DashboardLayout.tsx
+│   │   │   ├── AdminLayout.tsx
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 routes/
+│   │   │   ├── publicRoutes.tsx
+│   │   │   ├── privateRoutes.tsx
+│   │   │   ├── adminRoutes.tsx
+│   │   │   ├── vendorRoutes.tsx
+│   │   │   └── index.tsx
+│   │   │
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   ├── vite-env.d.ts
+│   │   └── index.css
+│   │
+│   ├── 📁 tests/
+│   │   ├── 📁 unit/
+│   │   │   ├── components/
+│   │   │   ├── hooks/
+│   │   │   ├── utils/
+│   │   │   └── services/
+│   │   ├── 📁 integration/
+│   │   ├── 📁 e2e/
+│   │   └── setup.ts
+│   │
+│   ├── 📁 docs/
+│   │   ├── 📁 api/
+│   │   │   ├── endpoints.md
+│   │   │   ├── authentication.md
+│   │   │   └── payment.md
+│   │   ├── 📁 components/
+│   │   │   ├── component-guidelines.md
+│   │   │   └── ui-library.md
+│   │   ├── 📁 setup/
+│   │   │   ├── installation.md
+│   │   │   ├── deployment.md
+│   │   │   └── environment.md
+│   │   ├── 📁 architecture/
+│   │   │   ├── folder-structure.md
+│   │   │   ├── state-management.md
+│   │   │   └── routing.md
+│   │   └── README.md
+│   │
+│   ├── 📁 .github/
+│   │   └── 📁 workflows/
+│   │       ├── ci.yml
+│   │       ├── cd.yml
+│   │       └── deploy.yml
+│   │
+│   ├── 📁 scripts/
+│   │   ├── setup-project.sh
+│   │   ├── generate-icons.sh
+│   │   ├── deploy.sh
+│   │   └── backup.sh
+│   │
+│   ├── .env.example
+│   ├── .env.local
+│   ├── .env.production
+│   ├── .gitignore
+│   ├── .eslintrc.json
+│   ├── .prettierrc
+│   ├── .prettierignore
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   ├── vite.config.ts
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── README.md
+│   ├── CHANGELOG.md
+│   └── index.html
+│
+├── 📁 backend/
+│   ├── 📁 src/
+│   │   ├── 📁 config/
+│   │   │   ├── database.ts
+│   │   │   ├── server.ts
+│   │   │   ├── middleware.ts
+│   │   │   └── constants.ts
+│   │   │
+│   │   ├── 📁 controllers/
+│   │   │   ├── authController.ts
+│   │   │   ├── productController.ts
+│   │   │   ├── categoryController.ts
+│   │   │   ├── cartController.ts
+│   │   │   ├── orderController.ts
+│   │   │   ├── userController.ts
+│   │   │   ├── vendorController.ts
+│   │   │   ├── adminController.ts
+│   │   │   └── paymentController.ts
+│   │   │
+│   │   ├── 📁 models/
+│   │   │   ├── User.ts
+│   │   │   ├── Product.ts
+│   │   │   ├── Category.ts
+│   │   │   ├── Cart.ts
+│   │   │   ├── Order.ts
+│   │   │   ├── Vendor.ts
+│   │   │   ├── Address.ts
+│   │   │   ├── Review.ts
+│   │   │   └── Payment.ts
+│   │   │
+│   │   ├── 📁 routes/
+│   │   │   ├── authRoutes.ts
+│   │   │   ├── productRoutes.ts
+│   │   │   ├── categoryRoutes.ts
+│   │   │   ├── cartRoutes.ts
+│   │   │   ├── orderRoutes.ts
+│   │   │   ├── userRoutes.ts
+│   │   │   ├── vendorRoutes.ts
+│   │   │   ├── adminRoutes.ts
+│   │   │   └── paymentRoutes.ts
+│   │   │
+│   │   ├── 📁 middleware/
+│   │   │   ├── authMiddleware.ts
+│   │   │   ├── validationMiddleware.ts
+│   │   │   ├── errorMiddleware.ts
+│   │   │   ├── vendorMiddleware.ts
+│   │   │   └── adminMiddleware.ts
+│   │   │
+│   │   ├── 📁 services/
+│   │   │   ├── authService.ts
+│   │   │   ├── productService.ts
+│   │   │   ├── orderService.ts
+│   │   │   ├── paymentService.ts
+│   │   │   ├── emailService.ts
+│   │   │   ├── notificationService.ts
+│   │   │   └── fileUploadService.ts
+│   │   │
+│   │   ├── 📁 utils/
+│   │   │   ├── validators.ts
+│   │   │   ├── helpers.ts
+│   │   │   ├── jwt.ts
+│   │   │   ├── logger.ts
+│   │   │   └── paymentProcessors.ts
+│   │   │
+│   │   ├── 📁 types/
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── 📁 database/
+│   │   │   ├── migrations/
+│   │   │   ├── seeders/
+│   │   │   └── connection.ts
+│   │   │
+│   │   ├── 📁 payments/
+│   │   │   ├── chapa/
+│   │   │   ├── telebirr/
+│   │   │   └── stripe/
+│   │   │
+│   │   ├── 📁 sockets/
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── app.ts
+│   │   └── server.ts
+│   │
+│   ├── 📁 tests/
+│   ├── 📁 docs/
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── Dockerfile
+│   └── README.md
+│
+├── 📁 admin-panel/
+│   ├── 📁 src/
+│   │   └── ... (similar to frontend but admin-focused)
+│   └── ... (config files)
+│
+├── 📁 mobile-app/
+│   ├── 📁 android/
+│   ├── 📁 ios/
+│   ├── 📁 src/
+│   └── ... (React Native setup)
+│
+├── 📁 shared/
+│   ├── 📁 types/
+│   │   └── shared.types.ts
+│   ├── 📁 utils/
+│   │   └── shared.utils.ts
+│   └── 📁 config/
+│       └── shared.config.ts
+│
+├── 📁 infrastructure/
+│   ├── 📁 docker/
+│   │   ├── frontend/
+│   │   │   └── Dockerfile
+│   │   ├── backend/
+│   │   │   └── Dockerfile
+│   │   ├── nginx/
+│   │   │   └── nginx.conf
+│   │   └── docker-compose.yml
+│   ├── 📁 terraform/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   ├── 📁 kubernetes/
+│   │   ├── deployment.yaml
+│   │   ├── service.yaml
+│   │   └── ingress.yaml
+│   └── 📁 ci-cd/
+│       ├── Jenkinsfile
+│       └── pipeline.yml
+│
+├── 📁 database/
+│   ├── 📁 schemas/
+│   │   ├── schema.sql
+│   │   ├── indexes.sql
+│   │   └── triggers.sql
+│   ├── 📁 migrations/
+│   ├── 📁 seed-data/
+│   └── 📁 backups/
+│
+├── 📁 docs/
+│   ├── 📁 project-docs/
+│   │   ├── requirements.md
+│   │   ├── architecture.md
+│   │   ├── api-specification.md
+│   │   ├── database-schema.md
+│   │   └── deployment-guide.md
+│   ├── 📁 user-manuals/
+│   │   ├── admin-guide.md
+│   │   ├── vendor-guide.md
+│   │   └── user-guide.md
+│   ├── 📁 api-docs/
+│   │   └── swagger.yaml
+│   └── README.md
+│
+├── 📁 scripts/
+│   ├── setup.sh
+│   ├── deploy.sh
+│   ├── backup.sh
+│   ├── migrate.sh
+│   └── test.sh
+│
+├── 📁 temp/
+│   └── .gitkeep
+│
+├── 📁 logs/
+│   └── .gitkeep
+│
+├── .gitignore
+├── .gitattributes
+├── .editorconfig
+├── .nvmrc
+├── .prettierrc
+├── .eslintrc.json
+├── package.json (root - monorepo)
+├── lerna.json (if using monorepo)
+├── README.md
+├── LICENSE
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
+├── SECURITY.md
+├── PROJECT_BRIEF.md
+└── BRIGHT_TECHMART_PLAN.md   make frontend setup the envirement step by step by step
