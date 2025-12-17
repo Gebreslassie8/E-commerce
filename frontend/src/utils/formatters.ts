@@ -1,15 +1,17 @@
 /**
- * Format currency in Ethiopian Birr
+ * Format currency in Ethiopian Birr or other currencies
  */
 export const formatCurrency = (amount: number, currency: string = 'ETB'): string => {
-  const formatter = new Intl.NumberFormat('en-ET', {
+  if (currency === 'ETB') {
+    return `ETB ${amount.toLocaleString('en-ET')}`
+  }
+  
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: currency === 'ETB' ? 'ETB' : 'USD',
+    currency: currency === 'USD' ? 'USD' : 'EUR',
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
-  })
-  
-  return formatter.format(amount)
+  }).format(amount)
 }
 
 /**
@@ -33,14 +35,32 @@ export const truncateText = (text: string, maxLength: number = 100): string => {
 }
 
 /**
- * Generate random ID
+ * Calculate discount percentage
  */
-export const generateId = (): string => {
-  return Math.random().toString(36).substring(2) + Date.now().toString(36)
+export const calculateDiscount = (originalPrice: number, salePrice: number): number => {
+  return Math.round(((originalPrice - salePrice) / originalPrice) * 100)
 }
 
 /**
- * Format phone number
+ * Generate product slug
+ */
+export const generateSlug = (name: string): string => {
+  return name
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+/**
+ * Format product rating with stars
+ */
+export const formatRating = (rating: number): string => {
+  return rating.toFixed(1)
+}
+
+/**
+ * Format phone number for Ethiopia
  */
 export const formatPhoneNumber = (phone: string): string => {
   const cleaned = phone.replace(/\D/g, '')
@@ -49,4 +69,14 @@ export const formatPhoneNumber = (phone: string): string => {
     return '+251 ' + match[1] + ' ' + match[2] + ' ' + match[3]
   }
   return phone
+}
+
+export default {
+  formatCurrency,
+  formatDate,
+  truncateText,
+  calculateDiscount,
+  generateSlug,
+  formatRating,
+  formatPhoneNumber
 }

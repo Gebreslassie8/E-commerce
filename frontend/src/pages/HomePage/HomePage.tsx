@@ -17,10 +17,10 @@ import {
   Gamepad,
   ChevronRight
 } from 'lucide-react'
-import HeroSlider from '../../src/components/widgets/HeroSlider'
-import ProductCard from '../../src/components/core/ui/cards/ProductCard'
-import CategoryCard from '../../src/components/core/ui/cards/CategoryCard'
-import LoadingSpinner from '../../src/components/core/ui/loaders/Spinner'
+import HeroSlider from '../../components/widgets/HeroSlider'
+import ProductCard from '../../components/core/ui/cards/ProductCard'
+import CategoryCard from '../../components/core/ui/cards/CategoryCard'
+import LoadingSpinner from '../../components/core/ui/loaders/Spinner'
 
 // Mock data - Replace with API calls
 const featuredProducts = [

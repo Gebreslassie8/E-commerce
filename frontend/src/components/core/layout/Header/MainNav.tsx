@@ -8,9 +8,9 @@ const MainNav = () => {
 
   const navItems = [
     { path: '/', label: 'Home', icon: Home },
-    { path: '/products', label: 'Shop', icon: ShoppingBag },
+    { path: '/products', label: 'Products', icon: ShoppingBag },
     { path: '/categories', label: 'Categories', icon: Tag },
-    { path: '/sale', label: 'Sale', icon: Tag }, // Recommended
+    { path: '/sales', label: 'Sale', icon: Tag }, // Recommended
     { 
       path: '/cart', 
       label: 'Cart', 
