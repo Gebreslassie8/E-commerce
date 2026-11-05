@@ -19,6 +19,7 @@ import TrackOrder from './pages/OrderPages/TrackOrder'
 import LoginPage from './pages/auth/Loginpage'
 import ForgotPassword from './pages/auth/ForgotPassword'
 import ResetPasswordPage from './pages/auth/ResetPassword'
+import RegisterPage from './pages/auth/Registerpage'
 
 // ============ Dashboard pages (adjust names to match yours) ============
 // ADMIN
@@ -60,6 +61,8 @@ function App() {
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/auth/register" element={<RegisterPage />} />
 
         {/* ============ Admin dashboard ============ */}
         <Route path="/admin" element={<DashboardLayout role="admin" />}>

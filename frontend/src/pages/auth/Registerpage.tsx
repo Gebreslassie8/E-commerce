@@ -1,189 +1,237 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { User, Mail, Lock, Eye, EyeOff, Check, AlertCircle, Shield, Sparkles, UserPlus } from 'lucide-react';
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import {
+  User,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  Check,
+  AlertCircle,
+  Shield,
+  Sparkles,
+  UserPlus,
+  Phone,
+} from 'lucide-react'
 
 interface RegisterFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  agreeToTerms: boolean;
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  password: string
+  confirmPassword: string
+  agreeToTerms: boolean
+}
+
+// Separate error type — allows string messages for boolean fields
+interface RegisterFormErrors {
+  firstName?: string
+  lastName?: string
+  email?: string
+  phone?: string
+  password?: string
+  confirmPassword?: string
+  agreeToTerms?: string
 }
 
 const RegisterPage: React.FC = () => {
-  const navigate = useNavigate();
-  
+  const navigate = useNavigate()
+
   const [formData, setFormData] = useState<RegisterFormData>({
     firstName: '',
     lastName: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
     agreeToTerms: false,
-  });
-  
-  const [errors, setErrors] = useState<Partial<RegisterFormData>>({});
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [passwordStrength, setPasswordStrength] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [apiError, setApiError] = useState<string>('');
-  const [apiSuccess, setApiSuccess] = useState<string>('');
+  })
+
+  const [errors, setErrors] = useState<RegisterFormErrors>({})
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [passwordStrength, setPasswordStrength] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
+  const [apiError, setApiError] = useState<string>('')
+  const [apiSuccess, setApiSuccess] = useState<string>('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    const { name, value, type, checked } = e.target
+    setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
-    }));
+    }))
 
-    // Clear error when user starts typing
-    if (errors[name as keyof RegisterFormData]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+    if (errors[name as keyof RegisterFormErrors]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }))
     }
 
-    // Check password strength
     if (name === 'password') {
-      calculatePasswordStrength(value);
+      calculatePasswordStrength(value)
     }
 
-    setApiError('');
-  };
+    setApiError('')
+  }
 
   const calculatePasswordStrength = (password: string) => {
-    let strength = 0;
-    
-    if (password.length >= 8) strength += 1;
-    if (/[A-Z]/.test(password)) strength += 1;
-    if (/[a-z]/.test(password)) strength += 1;
-    if (/[0-9]/.test(password)) strength += 1;
-    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
-    
-    setPasswordStrength(strength);
-  };
+    let strength = 0
+    if (password.length >= 8) strength += 1
+    if (/[A-Z]/.test(password)) strength += 1
+    if (/[a-z]/.test(password)) strength += 1
+    if (/[0-9]/.test(password)) strength += 1
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1
+    setPasswordStrength(strength)
+  }
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<RegisterFormData> = {};
+    const newErrors: RegisterFormErrors = {}
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
+      newErrors.firstName = 'First name is required'
     } else if (formData.firstName.length < 2) {
-      newErrors.firstName = 'First name must be at least 2 characters';
+      newErrors.firstName = 'First name must be at least 2 characters'
     }
 
     if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
+      newErrors.lastName = 'Last name is required'
     } else if (formData.lastName.length < 2) {
-      newErrors.lastName = 'Last name must be at least 2 characters';
+      newErrors.lastName = 'Last name must be at least 2 characters'
     }
 
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Email is required'
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = 'Please enter a valid email address'
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required'
+    } else if (!/^\+?251[0-9]{9}$|^0[0-9]{9}$/.test(formData.phone.replace(/[-\s]/g, ''))) {
+      newErrors.phone = 'Enter a valid Ethiopian phone (e.g., +251911234567)'
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'Password is required'
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
+      newErrors.password = 'Password must be at least 8 characters'
     } else if (passwordStrength < 3) {
-      newErrors.password = 'Password is too weak. Please make it stronger.';
+      newErrors.password = 'Password is too weak. Please make it stronger.'
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
+      newErrors.confirmPassword = 'Please confirm your password'
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = 'Passwords do not match'
     }
 
     if (!formData.agreeToTerms) {
-      newErrors.agreeToTerms = 'You must agree to the terms and conditions';
+      newErrors.agreeToTerms = 'You must agree to the terms and conditions'
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
 
   const getPasswordStrengthColor = () => {
-    if (passwordStrength <= 1) return 'bg-red-500';
-    if (passwordStrength <= 2) return 'bg-orange-500';
-    if (passwordStrength <= 3) return 'bg-yellow-500';
-    if (passwordStrength <= 4) return 'bg-green-500';
-    return 'bg-emerald-500';
-  };
+    if (passwordStrength <= 1) return 'bg-red-500'
+    if (passwordStrength <= 2) return 'bg-orange-500'
+    if (passwordStrength <= 3) return 'bg-yellow-500'
+    if (passwordStrength <= 4) return 'bg-green-500'
+    return 'bg-emerald-500'
+  }
 
   const getPasswordStrengthText = () => {
-    if (passwordStrength <= 1) return 'Very Weak';
-    if (passwordStrength <= 2) return 'Weak';
-    if (passwordStrength <= 3) return 'Good';
-    if (passwordStrength <= 4) return 'Strong';
-    return 'Very Strong';
-  };
+    if (passwordStrength <= 1) return 'Very Weak'
+    if (passwordStrength <= 2) return 'Weak'
+    if (passwordStrength <= 3) return 'Good'
+    if (passwordStrength <= 4) return 'Strong'
+    return 'Very Strong'
+  }
 
   const getPasswordStrengthTextColor = () => {
-    if (passwordStrength <= 1) return 'text-red-600';
-    if (passwordStrength <= 2) return 'text-orange-600';
-    if (passwordStrength <= 3) return 'text-yellow-600';
-    if (passwordStrength <= 4) return 'text-green-600';
-    return 'text-emerald-600';
-  };
+    if (passwordStrength <= 1) return 'text-red-600'
+    if (passwordStrength <= 2) return 'text-orange-600'
+    if (passwordStrength <= 3) return 'text-yellow-600'
+    if (passwordStrength <= 4) return 'text-green-600'
+    return 'text-emerald-600'
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
+    e.preventDefault()
 
-    setIsLoading(true);
-    setApiError('');
-    setApiSuccess('');
+    if (!validateForm()) return
+
+    setIsLoading(true)
+    setApiError('')
+    setApiSuccess('')
 
     try {
-      // Simulate API call - Replace with actual registration API
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      console.log('Registration data:', formData);
-      
-      // Store user data in localStorage (for demo purposes)
+      // ============================================================
+      // MOCK — replace with real API call:
+      // const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/register`, {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({
+      //     first_name: formData.firstName,
+      //     last_name: formData.lastName,
+      //     email: formData.email,
+      //     phone: formData.phone,
+      //     password: formData.password,
+      //     role: 'customer',
+      //   }),
+      // })
+      // const data = await res.json()
+      // if (!res.ok) throw new Error(data.error || 'Registration failed')
+      // ============================================================
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+
+      // Mock user data — includes role so login redirects correctly
       const userData = {
         id: 'new-user-' + Date.now(),
         firstName: formData.firstName,
         lastName: formData.lastName,
+        name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
+        phone: formData.phone,
+        role: 'customer',           // ⭐ critical — drives dashboard redirect
+        token: 'mock-jwt-token-' + Date.now(),
         createdAt: new Date().toISOString(),
-      };
-      
-      localStorage.setItem('user', JSON.stringify(userData));
-      localStorage.setItem('isRegistered', 'true');
-      
-      setApiSuccess('Account created successfully! Redirecting to login...');
-      
-      // Redirect to login after 2 seconds
+      }
+
+      localStorage.setItem('user', JSON.stringify(userData))
+      localStorage.setItem('authToken', userData.token)
+      localStorage.setItem('isRegistered', 'true')
+
+      setApiSuccess('Account created successfully! Redirecting...')
+
+      // Redirect to customer dashboard
       setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+        navigate('/account', { replace: true })
+      }, 1200)
     } catch (error: any) {
-      setApiError(error.message || 'Registration failed. Please try again.');
+      setApiError(error.message || 'Registration failed. Please try again.')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleDemoRegistration = () => {
     setFormData({
       firstName: 'Demo',
       lastName: 'User',
       email: 'demo@example.com',
+      phone: '+251911234567',
       password: 'Demo@1234',
       confirmPassword: 'Demo@1234',
       agreeToTerms: true,
-    });
-    calculatePasswordStrength('Demo@1234');
-  };
+    })
+    calculatePasswordStrength('Demo@1234')
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -194,14 +242,14 @@ const RegisterPage: React.FC = () => {
             <UserPlus className="h-12 w-12 text-white" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-50">
           Create your account
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
           Already have an account?{' '}
           <Link
             to="/login"
-            className="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200"
+            className="font-medium text-primary-600 dark:text-primary-400 hover:text-primary-500 transition-colors duration-200"
           >
             Sign in here
           </Link>
@@ -214,10 +262,10 @@ const RegisterPage: React.FC = () => {
         transition={{ delay: 0.1 }}
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
       >
-        <div className="bg-white py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-gray-200">
+        <div className="bg-white dark:bg-gray-900 py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-gray-200 dark:border-gray-800">
           <button
             onClick={handleDemoRegistration}
-            className="w-full mb-6 py-3 px-4 border border-primary-200 rounded-xl text-sm font-medium text-primary-700 bg-primary-50 hover:bg-primary-100 transition-all duration-200 flex items-center justify-center group"
+            className="w-full mb-6 py-3 px-4 border border-primary-200 dark:border-primary-800 rounded-xl text-sm font-medium text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30 hover:bg-primary-100 dark:hover:bg-primary-900/50 transition-all duration-200 flex items-center justify-center group"
           >
             <Sparkles className="h-4 w-4 mr-2 group-hover:rotate-12 transition-transform" />
             Fill with Demo Data
@@ -228,7 +276,7 @@ const RegisterPage: React.FC = () => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-start"
+                className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-xl flex items-start"
               >
                 <AlertCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
                 <span className="text-sm">{apiError}</span>
@@ -239,16 +287,17 @@ const RegisterPage: React.FC = () => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl flex items-start"
+                className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded-xl flex items-start"
               >
                 <Check className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
                 <span className="text-sm">{apiSuccess}</span>
               </motion.div>
             )}
 
+            {/* Name — 2 columns */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   <User className="inline-block w-4 h-4 mr-2" />
                   First Name
                 </label>
@@ -262,8 +311,8 @@ const RegisterPage: React.FC = () => {
                     value={formData.firstName}
                     onChange={handleChange}
                     className={`appearance-none block w-full px-4 py-3 border ${
-                      errors.firstName ? 'border-red-300' : 'border-gray-300'
-                    } rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 ${
+                      errors.firstName ? 'border-red-300 dark:border-red-700' : 'border-gray-300 dark:border-gray-700'
+                    } rounded-xl placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 ${
                       errors.firstName ? 'focus:ring-red-500' : ''
                     }`}
                     placeholder="John"
@@ -272,7 +321,7 @@ const RegisterPage: React.FC = () => {
                     <motion.p
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="mt-2 text-sm text-red-600 flex items-center"
+                      className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center"
                     >
                       <AlertCircle className="h-4 w-4 mr-1" />
                       {errors.firstName}
@@ -282,7 +331,7 @@ const RegisterPage: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Last Name
                 </label>
                 <div className="mt-1">
@@ -295,8 +344,8 @@ const RegisterPage: React.FC = () => {
                     value={formData.lastName}
                     onChange={handleChange}
                     className={`appearance-none block w-full px-4 py-3 border ${
-                      errors.lastName ? 'border-red-300' : 'border-gray-300'
-                    } rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 ${
+                      errors.lastName ? 'border-red-300 dark:border-red-700' : 'border-gray-300 dark:border-gray-700'
+                    } rounded-xl placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 ${
                       errors.lastName ? 'focus:ring-red-500' : ''
                     }`}
                     placeholder="Doe"
@@ -305,7 +354,7 @@ const RegisterPage: React.FC = () => {
                     <motion.p
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="mt-2 text-sm text-red-600 flex items-center"
+                      className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center"
                     >
                       <AlertCircle className="h-4 w-4 mr-1" />
                       {errors.lastName}
@@ -315,8 +364,9 @@ const RegisterPage: React.FC = () => {
               </div>
             </div>
 
+            {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 <Mail className="inline-block w-4 h-4 mr-2" />
                 Email Address
               </label>
@@ -330,8 +380,8 @@ const RegisterPage: React.FC = () => {
                   value={formData.email}
                   onChange={handleChange}
                   className={`appearance-none block w-full px-4 py-3 border ${
-                    errors.email ? 'border-red-300' : 'border-gray-300'
-                  } rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 ${
+                    errors.email ? 'border-red-300 dark:border-red-700' : 'border-gray-300 dark:border-gray-700'
+                  } rounded-xl placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 ${
                     errors.email ? 'focus:ring-red-500' : ''
                   }`}
                   placeholder="you@example.com"
@@ -340,7 +390,7 @@ const RegisterPage: React.FC = () => {
                   <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="mt-2 text-sm text-red-600 flex items-center"
+                    className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center"
                   >
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.email}
@@ -349,8 +399,44 @@ const RegisterPage: React.FC = () => {
               </div>
             </div>
 
+            {/* Phone */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <Phone className="inline-block w-4 h-4 mr-2" />
+                Phone Number
+              </label>
+              <div className="mt-1">
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  required
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className={`appearance-none block w-full px-4 py-3 border ${
+                    errors.phone ? 'border-red-300 dark:border-red-700' : 'border-gray-300 dark:border-gray-700'
+                  } rounded-xl placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 ${
+                    errors.phone ? 'focus:ring-red-500' : ''
+                  }`}
+                  placeholder="+251 911 234 567"
+                />
+                {errors.phone && (
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center"
+                  >
+                    <AlertCircle className="h-4 w-4 mr-1" />
+                    {errors.phone}
+                  </motion.p>
+                )}
+              </div>
+            </div>
+
+            {/* Password */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 <Lock className="inline-block w-4 h-4 mr-2" />
                 Password
               </label>
@@ -364,8 +450,8 @@ const RegisterPage: React.FC = () => {
                   value={formData.password}
                   onChange={handleChange}
                   className={`appearance-none block w-full px-4 py-3 border ${
-                    errors.password ? 'border-red-300' : 'border-gray-300'
-                  } rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 pr-12 ${
+                    errors.password ? 'border-red-300 dark:border-red-700' : 'border-gray-300 dark:border-gray-700'
+                  } rounded-xl placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 pr-12 ${
                     errors.password ? 'focus:ring-red-500' : ''
                   }`}
                   placeholder="Create a strong password"
@@ -377,16 +463,16 @@ const RegisterPage: React.FC = () => {
                   tabIndex={-1}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors" />
+                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" />
                   ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors" />
+                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" />
                   )}
                 </button>
                 {errors.password && (
                   <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="mt-2 text-sm text-red-600 flex items-center"
+                    className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center"
                   >
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.password}
@@ -397,12 +483,12 @@ const RegisterPage: React.FC = () => {
               {formData.password && (
                 <div className="mt-3">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-600">Password strength</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Password strength</span>
                     <span className={`text-sm font-medium ${getPasswordStrengthTextColor()}`}>
                       {getPasswordStrengthText()}
                     </span>
                   </div>
-                  <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${(passwordStrength / 5) * 100}%` }}
@@ -410,7 +496,7 @@ const RegisterPage: React.FC = () => {
                       className={`h-full ${getPasswordStrengthColor()}`}
                     />
                   </div>
-                  
+
                   <div className="mt-3 grid grid-cols-2 gap-2">
                     <div className={`flex items-center text-xs ${formData.password.length >= 8 ? 'text-green-600' : 'text-gray-400'}`}>
                       <Check className="h-3 w-3 mr-1" />
@@ -437,8 +523,9 @@ const RegisterPage: React.FC = () => {
               )}
             </div>
 
+            {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Confirm Password
               </label>
               <div className="mt-1 relative">
@@ -451,8 +538,8 @@ const RegisterPage: React.FC = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className={`appearance-none block w-full px-4 py-3 border ${
-                    errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                  } rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 pr-12 ${
+                    errors.confirmPassword ? 'border-red-300 dark:border-red-700' : 'border-gray-300 dark:border-gray-700'
+                  } rounded-xl placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 pr-12 ${
                     errors.confirmPassword ? 'focus:ring-red-500' : ''
                   }`}
                   placeholder="Confirm your password"
@@ -464,16 +551,16 @@ const RegisterPage: React.FC = () => {
                   tabIndex={-1}
                 >
                   {showConfirmPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors" />
+                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" />
                   ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors" />
+                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" />
                   )}
                 </button>
                 {errors.confirmPassword && (
                   <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="mt-2 text-sm text-red-600 flex items-center"
+                    className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center"
                   >
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.confirmPassword}
@@ -482,24 +569,27 @@ const RegisterPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-blue-50 rounded-xl p-4">
+            {/* Why we need this */}
+            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <Shield className="h-5 w-5 text-blue-400" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-blue-800">
+                  <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200">
                     Why we need this information
                   </h3>
-                  <div className="mt-1 text-sm text-blue-700">
+                  <div className="mt-1 text-sm text-blue-700 dark:text-blue-300">
                     <p>• Your name helps personalize your experience</p>
                     <p>• Email is required for account verification and communication</p>
+                    <p>• Phone number is needed for delivery coordination</p>
                     <p>• Strong password keeps your account secure</p>
                   </div>
                 </div>
               </div>
             </div>
 
+            {/* Terms */}
             <div className="flex items-start">
               <div className="flex items-center h-5">
                 <input
@@ -508,17 +598,17 @@ const RegisterPage: React.FC = () => {
                   type="checkbox"
                   checked={formData.agreeToTerms}
                   onChange={handleChange}
-                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-700 rounded"
                 />
               </div>
               <div className="ml-3 text-sm">
-                <label htmlFor="agreeToTerms" className="text-gray-700">
+                <label htmlFor="agreeToTerms" className="text-gray-700 dark:text-gray-300">
                   I agree to the{' '}
-                  <Link to="/terms" className="font-medium text-primary-600 hover:text-primary-500">
+                  <Link to="/terms" className="font-medium text-primary-600 dark:text-primary-400 hover:text-primary-500">
                     Terms of Service
                   </Link>{' '}
                   and{' '}
-                  <Link to="/privacy" className="font-medium text-primary-600 hover:text-primary-500">
+                  <Link to="/privacy" className="font-medium text-primary-600 dark:text-primary-400 hover:text-primary-500">
                     Privacy Policy
                   </Link>
                 </label>
@@ -526,7 +616,7 @@ const RegisterPage: React.FC = () => {
                   <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="mt-2 text-sm text-red-600 flex items-center"
+                    className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center"
                   >
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.agreeToTerms}
@@ -535,6 +625,7 @@ const RegisterPage: React.FC = () => {
               </div>
             </div>
 
+            {/* Submit */}
             <div>
               <motion.button
                 whileHover={{ scale: 1.02 }}
@@ -545,9 +636,18 @@ const RegisterPage: React.FC = () => {
               >
                 {isLoading ? (
                   <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     Creating account...
                   </span>
@@ -561,13 +661,14 @@ const RegisterPage: React.FC = () => {
             </div>
           </form>
 
+          {/* Social signup */}
           <div className="mt-8">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
+                <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">
+                <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">
                   Or sign up with
                 </span>
               </div>
@@ -578,7 +679,7 @@ const RegisterPage: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 type="button"
-                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-xl shadow-sm bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -592,7 +693,7 @@ const RegisterPage: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 type="button"
-                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-xl shadow-sm bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
               >
                 <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
                   <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
@@ -603,9 +704,9 @@ const RegisterPage: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 type="button"
-                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-xl shadow-sm bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
               >
-                <svg className="w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-gray-800 dark:text-gray-200" fill="currentColor" viewBox="0 0 24 24">
                   <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
                 </svg>
               </motion.button>
@@ -614,24 +715,24 @@ const RegisterPage: React.FC = () => {
         </div>
 
         <div className="mt-8 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             By creating an account, you agree to our{' '}
-            <Link to="/terms" className="font-medium text-primary-600 hover:text-primary-500">
+            <Link to="/terms" className="font-medium text-primary-600 dark:text-primary-400 hover:text-primary-500">
               Terms of Service
             </Link>
             ,{' '}
-            <Link to="/privacy" className="font-medium text-primary-600 hover:text-primary-500">
+            <Link to="/privacy" className="font-medium text-primary-600 dark:text-primary-400 hover:text-primary-500">
               Privacy Policy
             </Link>
             , and{' '}
-            <Link to="/cookies" className="font-medium text-primary-600 hover:text-primary-500">
+            <Link to="/cookies" className="font-medium text-primary-600 dark:text-primary-400 hover:text-primary-500">
               Cookie Policy
             </Link>
           </p>
         </div>
       </motion.div>
     </div>
-  );
-};
+  )
+}
 
-export default RegisterPage;
+export default RegisterPage
