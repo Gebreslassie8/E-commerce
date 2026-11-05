@@ -14,7 +14,7 @@ import Salespage from './pages/CategoriesPage/Salespage'
 import ContactPage from './pages/HomePage/ContactPage'
 import Aboutpage from './pages/HomePage/Aboutpage'
 import TrackOrder from './pages/OrderPages/TrackOrder'
-
+import WishlistPage from './pages/WishlistPage'
 // Auth pages
 import LoginPage from './pages/auth/Loginpage'
 import ForgotPassword from './pages/auth/ForgotPassword'
@@ -53,6 +53,8 @@ function App() {
           <Route path="cart" element={<CartPage />} />
           <Route path="sales" element={<Salespage />} />
           <Route path="track-order" element={<TrackOrder />} />
+          <Route path="wishlist" element={<WishlistPage />} />   {/* ← new */}
+
         </Route>
 
         {/* ============ Auth (no layout) ============ */}
