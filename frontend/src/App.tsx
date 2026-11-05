@@ -13,6 +13,8 @@ import Aboutpage from "./pages/HomePage/Aboutpage.tsx";
 import LoginPage from "./pages/auth/Loginpage.tsx";
 import ForgotPassword from "./pages/auth/ForgotPassword.tsx";
 import ResetPasswordPage from "./pages/auth/ResetPassword.tsx";
+import TrackOrder from './pages/OrderPages/TrackOrder'
+
 
 function App() {
   return (
@@ -36,6 +38,9 @@ function App() {
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+      
+ 
+       <Route path="/track-order" element={<TrackOrder />} />
       </Routes>
 
       <Toaster position="top-right" />
