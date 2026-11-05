@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom'
-import Header from '../components/core/layout/Header/Header.tsx'
 import Footer from '../components/core/layout/Footer/Footer.tsx'
+import PublicHeader from '../components/core/layout/Header/PublicHeader.tsx'
 
 const MainLayout = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+    <PublicHeader />
       <main className="flex-grow">
         <Outlet />
       </main>

@@ -1,26 +1,48 @@
-import { Routes, Route } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import MainLayout from "./layouts/MainLayout.tsx";
-// for public pages
-import HomePage from "./pages/HomePage/HomePage.tsx";
-import ProductListingPage from "./pages/ProductPages/ProductListingPage.tsx";
-import CategoriesPage from './pages/CategoriesPage/CategoriesPage';
-import CartPage from "./pages/CategoriesPage/CartPage.tsx";
-import Salespage from "./pages/CategoriesPage/Salespage.tsx";
-import ContactPage from "./pages/HomePage/ContactPage.tsx";
-import Aboutpage from "./pages/HomePage/Aboutpage.tsx";
-// Authentication Pages
-import LoginPage from "./pages/auth/Loginpage.tsx";
-import ForgotPassword from "./pages/auth/ForgotPassword.tsx";
-import ResetPasswordPage from "./pages/auth/ResetPassword.tsx";
+import { Routes, Route } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
+
+// Layouts
+import MainLayout from './layouts/MainLayout'
+import DashboardLayout from './layouts/DashboardLayout'
+
+// Public pages
+import HomePage from './pages/HomePage/HomePage'
+import ProductListingPage from './pages/ProductPages/ProductListingPage'
+import CategoriesPage from './pages/CategoriesPage/CategoriesPage'
+import CartPage from './pages/CategoriesPage/CartPage'
+import Salespage from './pages/CategoriesPage/Salespage'
+import ContactPage from './pages/HomePage/ContactPage'
+import Aboutpage from './pages/HomePage/Aboutpage'
 import TrackOrder from './pages/OrderPages/TrackOrder'
 
+// Auth pages
+import LoginPage from './pages/auth/Loginpage'
+import ForgotPassword from './pages/auth/ForgotPassword'
+import ResetPasswordPage from './pages/auth/ResetPassword'
+
+// ============ Dashboard pages (adjust names to match yours) ============
+// ADMIN
+import AdminDashboard from './pages/DashboardPages/AdminDashboard'
+import UserManagement from './pages/DashboardPages/UserManagement'
+import VendorManagement from './pages/DashboardPages/VendorManagement'
+
+// VENDOR
+import VendorDashboard from './pages/DashboardPages/VendorDashboard'
+
+// CUSTOMER
+import UserDashboard from './pages/DashboardPages/UserDashboard'
+import OrderHistory from './pages/DashboardPages/OrderHistory'
+
+// Shared (optional — remove if you don't have these)
+import ProductManagement from './pages/DashboardPages/ProductManagement'
+import OrderManagement from './pages/DashboardPages/OrderManagement'
+import SettingsPage from './pages/DashboardPages/SettingsPage'
 
 function App() {
   return (
     <>
       <Routes>
-        {/* Main app routes with layout */}
+        {/* ============ Public site ============ */}
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="products" element={<ProductListingPage />} />
@@ -29,23 +51,46 @@ function App() {
           <Route path="about" element={<Aboutpage />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="sales" element={<Salespage />} />
+          <Route path="track-order" element={<TrackOrder />} />
         </Route>
-        
-        {/* Authentication routes WITHOUT MainLayout */}
+
+        {/* ============ Auth (no layout) ============ */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        {/* Redirect from /auth/login to /login for backward compatibility */}
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-      
- 
-       <Route path="/track-order" element={<TrackOrder />} />
+
+        {/* ============ Admin dashboard ============ */}
+        <Route path="/admin" element={<DashboardLayout role="admin" />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<UserManagement />} />
+          <Route path="vendors" element={<VendorManagement />} />
+          <Route path="products" element={<ProductManagement />} />
+          <Route path="orders" element={<OrderManagement />} />
+          <Route path="settings" element={<SettingsPage />} />
+        </Route>
+
+        {/* ============ Vendor dashboard ============ */}
+        <Route path="/vendor" element={<DashboardLayout role="vendor" />}>
+          <Route index element={<VendorDashboard />} />
+          <Route path="products" element={<ProductManagement />} />
+          <Route path="orders" element={<OrderManagement />} />
+          <Route path="settings" element={<SettingsPage />} />
+        </Route>
+
+        {/* ============ Customer dashboard ============ */}
+        <Route path="/account" element={<DashboardLayout role="customer" />}>
+          <Route index element={<UserDashboard />} />
+          <Route path="orders" element={<OrderHistory />} />
+          <Route path="wishlist" element={<CartPage />} />
+          <Route path="settings" element={<SettingsPage />} />
+        </Route>
       </Routes>
 
       <Toaster position="top-right" />
     </>
-  );
+  )
 }
 
-export default App;
+export default App

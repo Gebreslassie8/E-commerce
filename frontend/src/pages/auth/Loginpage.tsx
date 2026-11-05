@@ -1,114 +1,140 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, AlertCircle, LogIn, Sparkles, Shield, Rocket } from 'lucide-react';
+import React, { useState } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { Eye, EyeOff, Mail, Lock, AlertCircle, LogIn, Shield, Rocket } from 'lucide-react'
 
 interface LoginFormData {
-  email: string;
-  password: string;
-  rememberMe: boolean;
+  email: string
+  password: string
+  rememberMe: boolean
+}
+
+// Determine where to send the user based on their role
+const getRoleRedirect = (role?: string): string => {
+  switch (role) {
+    case 'admin':
+      return '/admin'
+    case 'vendor':
+    case 'seller':
+      return '/vendor'
+    case 'customer':
+    case 'user':
+      return '/account'
+    default:
+      return '/'
+  }
 }
 
 const LoginPage: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = (location.state as any)?.from?.pathname || '/';
+  const navigate = useNavigate()
+  const location = useLocation()
+  const from = (location.state as any)?.from?.pathname || '/'
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: '',
     rememberMe: false,
-  });
-  const [errors, setErrors] = useState<Partial<LoginFormData>>({});
-  const [showPassword, setShowPassword] = useState(false);
-  const [apiError, setApiError] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(false);
+  })
+  const [errors, setErrors] = useState<Partial<LoginFormData>>({})
+  const [showPassword, setShowPassword] = useState(false)
+  const [apiError, setApiError] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    const { name, value, type, checked } = e.target
+    setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
-    }));
-    // Clear error when user starts typing
+    }))
     if (errors[name as keyof LoginFormData]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: '' }))
     }
-    setApiError('');
-  };
+    setApiError('')
+  }
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<LoginFormData> = {};
+    const newErrors: Partial<LoginFormData> = {}
 
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Email is required'
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = 'Please enter a valid email address'
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'Password is required'
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = 'Password must be at least 6 characters'
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
+    e.preventDefault()
 
-    setIsLoading(true);
-    setApiError('');
+    if (!validateForm()) return
+
+    setIsLoading(true)
+    setApiError('')
 
     try {
-      // Simulate API call - Replace with actual authentication
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Mock successful login
-      console.log('Login data:', formData);
-      
-      // Store authentication data
-      if (formData.rememberMe) {
-        localStorage.setItem('rememberMe', 'true');
-      }
-      
-      // Mock user data
+      // ============================================================
+      // Mock login — replace with real API call
+      // Expected backend response: { token, user: { id, email, name, role } }
+      // ============================================================
+      await new Promise((resolve) => setTimeout(resolve, 1200))
+
+      // Determine role from email prefix (demo only)
+      const emailPrefix = formData.email.split('@')[0].toLowerCase()
+      const mockRole =
+        emailPrefix.includes('admin')
+          ? 'admin'
+          : emailPrefix.includes('vendor') || emailPrefix.includes('seller')
+          ? 'vendor'
+          : 'customer'
+
       const userData = {
         id: '1',
         email: formData.email,
-        name: formData.email.split('@')[0],
-        token: 'mock-jwt-token'
-      };
-      
-      localStorage.setItem('authToken', userData.token);
-      localStorage.setItem('user', JSON.stringify(userData));
-      
-      // Redirect user
-      navigate(from, { replace: true });
+        name: emailPrefix,
+        role: mockRole,
+        token: 'mock-jwt-token',
+      }
+
+      // Store auth info
+      if (formData.rememberMe) {
+        localStorage.setItem('rememberMe', 'true')
+      }
+      localStorage.setItem('authToken', userData.token)
+      localStorage.setItem('user', JSON.stringify(userData))
+
+      // Redirect: use `from` if user was headed somewhere specific,
+      // otherwise send them to their role's dashboard
+      const redirectTo = from !== '/' ? from : getRoleRedirect(userData.role)
+      navigate(redirectTo, { replace: true })
     } catch (error: any) {
-      setApiError(error.message || 'Login failed. Please check your credentials and try again.');
+      setApiError(
+        error.message || 'Login failed. Please check your credentials and try again.'
+      )
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleSocialLogin = (provider: 'google' | 'facebook' | 'github') => {
-    console.log(`Logging in with ${provider}`);
-    // Implement social login logic here
-    setApiError(`Social login with ${provider} is not implemented yet.`);
-  };
+    console.log(`Logging in with ${provider}`)
+    setApiError(`Social login with ${provider} is not implemented yet.`)
+  }
 
   const handleDemoLogin = () => {
     setFormData({
-      email: 'demo@example.com',
+      email: 'customer@demo.com',
       password: 'demo123',
       rememberMe: true,
-    });
-  };
+    })
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -276,9 +302,25 @@ const LoginPage: React.FC = () => {
               >
                 {isLoading ? (
                   <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     Signing in...
                   </span>
@@ -298,9 +340,7 @@ const LoginPage: React.FC = () => {
                 <div className="w-full border-t border-gray-300"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">
-                  Or continue with
-                </span>
+                <span className="px-4 bg-white text-gray-500">Or continue with</span>
               </div>
             </div>
 
@@ -328,7 +368,11 @@ const LoginPage: React.FC = () => {
                 className="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all duration-200"
               >
                 <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
+                  <path
+                    fillRule="evenodd"
+                    d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </motion.button>
 
@@ -340,7 +384,11 @@ const LoginPage: React.FC = () => {
                 className="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all duration-200"
               >
                 <svg className="w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                  <path
+                    fillRule="evenodd"
+                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </motion.button>
             </div>
@@ -361,7 +409,7 @@ const LoginPage: React.FC = () => {
         </div>
       </motion.div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage
