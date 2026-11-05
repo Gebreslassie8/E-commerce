@@ -2,18 +2,104 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   Base Layer — global styles + dark mode fallbacks
+   ============================================================ */
 @layer base {
-  /* Custom scrollbar */
+  /* Root color scheme — tells browser which palette to use */
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+
+  /* ---------- Page background & default text ---------- */
+  body {
+    @apply bg-gray-50 text-gray-900 transition-colors duration-200;
+  }
+  html.dark body {
+    @apply bg-gray-950 text-gray-100;
+  }
+
+  /* ---------- Custom scrollbar ---------- */
   ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-gray-100;
+    @apply bg-gray-100 dark:bg-gray-900;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-400 rounded-full;
+    @apply bg-gray-400 dark:bg-gray-700 rounded-full;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-500;
+    @apply bg-gray-500 dark:bg-gray-600;
+  }
+
+  /* ---------- Dark mode safety net ----------
+     Ensures pages that forgot `dark:` classes still look correct.
+     Only applies when <html class="dark"> is set.
+     ------------------------------------------- */
+
+  /* Backgrounds */
+  html.dark .bg-white {
+    @apply bg-gray-900;
+  }
+  html.dark .bg-gray-50 {
+    @apply bg-gray-950;
+  }
+  html.dark .bg-gray-100 {
+    @apply bg-gray-800;
+  }
+
+  /* Text */
+  html.dark .text-gray-900 {
+    @apply text-gray-50;
+  }
+  html.dark .text-gray-800 {
+    @apply text-gray-100;
+  }
+  html.dark .text-gray-700 {
+    @apply text-gray-300;
+  }
+  html.dark .text-gray-600 {
+    @apply text-gray-400;
+  }
+
+  /* Borders */
+  html.dark .border-gray-200 {
+    @apply border-gray-800;
+  }
+  html.dark .border-gray-300 {
+    @apply border-gray-700;
+  }
+
+  /* Inputs, textareas, selects */
+  html.dark input:not([type="checkbox"]):not([type="radio"]),
+  html.dark textarea,
+  html.dark select {
+    @apply bg-gray-800 text-gray-100 border-gray-700 placeholder-gray-500;
+  }
+
+  /* Tables */
+  html.dark table {
+    @apply text-gray-100;
+  }
+  html.dark thead {
+    @apply bg-gray-800;
+  }
+  html.dark tbody tr:hover {
+    @apply bg-gray-800/50;
+  }
+
+  /* Dividers */
+  html.dark hr {
+    @apply border-gray-800;
+  }
+
+  /* Links (default — do not override explicit colors) */
+  html.dark a:not([class*="text-"]) {
+    @apply text-gray-200;
   }
 }
