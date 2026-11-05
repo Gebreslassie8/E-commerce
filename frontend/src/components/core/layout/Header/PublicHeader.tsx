@@ -28,8 +28,6 @@ import MobileMenu from './MobileMenu'
 const LANGUAGES = [
   { code: 'en', label: 'English', native: 'English' },
   { code: 'am', label: 'Amharic', native: 'አማርኛ' },
-  { code: 'om', label: 'Afaan Oromoo', native: 'Afaan Oromoo' },
-  { code: 'ti', label: 'Tigrinya', native: 'ትግርኛ' },
 ] as const
 
 type LanguageCode = (typeof LANGUAGES)[number]['code']
